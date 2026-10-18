@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MOTION 3D — Spatial Studio</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand"><div class="brand-mark">M<span>3</span></div><div><b>MOTION <em>3D</em></b><small>SPATIAL CREATIVE STUDIO</small></div></div>
+    <div class="project-name"><span class="live-dot"></span> Untitled scene <small>LOCAL PROJECT</small></div>
+    <div class="top-actions"><button id="saveBtn" class="ghost">Export scene</button><button id="pairBtn" class="primary"><span>▦</span> Connect phone</button></div>
+  </header>
+  <main class="workspace">
+    <aside class="left-panel panel">
+      <div class="panel-heading"><span>SCENE OBJECTS</span><span class="tiny-pill" id="objectCount">01</span></div>
+      <div class="section-label">PRIMITIVES</div>
+      <div class="object-grid">
+        <button class="object-tile selected" data-shape="cube"><span class="shape-icon">⬡</span><b>Cube</b></button>
+        <button class="object-tile" data-shape="sphere"><span class="shape-icon">◉</span><b>Sphere</b></button>
+        <button class="object-tile" data-shape="pyramid"><span class="shape-icon">△</span><b>Pyramid</b></button>
+        <button class="object-tile" data-shape="cone"><span class="shape-icon">◭</span><b>Cone</b></button>
+        <button class="object-tile" data-shape="cylinder"><span class="shape-icon">▤</span><b>Cylinder</b></button>
+        <button class="object-tile" data-shape="prism"><span class="shape-icon">◬</span><b>Tri prism</b></button>
+        <button class="object-tile" data-shape="torus"><span class="shape-icon">◎</span><b>Torus</b></button>
+        <button class="object-tile" data-shape="plane"><span class="shape-icon">▱</span><b>Plane</b></button>
+      </div>
+      <button id="addImageBtn" class="wide-ghost">＋ Import 3D model (.OBJ / .STL)</button>
+      <input id="imageInput" type="file" accept=".obj,.stl,model/obj,model/stl,application/sla" hidden>
+      <div class="section-label scene-label">HIERARCHY <button id="addBtn">＋</button></div>
+      <div id="sceneList" class="scene-list"></div>
+      <div class="left-bottom"><div class="mini-orbit">✳</div><div><b>Spatial engine</b><small>Native WebGL · Local</small></div><span class="status-ok">●</span></div>
+    </aside>
+    <section class="viewport-panel">
+      <div class="viewport-toolbar"><div class="mode-tabs"><button class="active">◈ Scene</button><button id="gridToggle">▦ Grid</button></div><div class="view-tools"><button id="resetView" title="Reset view">⟲</button><button id="fullscreenBtn" title="Fullscreen">⛶</button></div></div>
+      <div id="canvasWrap" class="canvas-wrap"><canvas id="glcanvas"></canvas><div class="viewport-vignette"></div>
+        <div class="viewport-caption"><span class="live-dot"></span> REAL-TIME VIEWPORT <small>WEBGL</small></div>
+        <div class="axis-widget"><span class="axis-x">X</span><span class="axis-y">Y</span><span class="axis-z">Z</span><i></i></div>
+        <div id="hint" class="viewport-hint">Drag to orbit · Scroll to zoom · Select an object to edit</div>
+        <div class="viewport-bottom"><span>Perspective</span><span id="fps">RENDER READY</span><span id="coords">X 0.00&nbsp; Y 0.00&nbsp; Z 0.00</span></div>
+      </div>
+      <div class="timeline"><div><span class="timeline-icon">◷</span> SCENE TIMELINE <small>LIVE</small></div><div class="timeline-track"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span>00:00:00</span></div>
+    </section>
+    <aside class="right-panel panel">
+      <div class="panel-heading"><span>OBJECT INSPECTOR</span><button id="deleteBtn" class="icon-button" title="Delete selected">⌫</button></div>
+      <div class="selected-object"><div class="selected-thumb">⬡</div><div class="selected-meta"><b id="selectedName">Cube 01</b><small id="selectedType">MESH · GEOMETRY</small></div><span class="eye">◉</span></div>
+      <label class="field-label">OBJECT NAME<input id="nameInput" value="Cube 01"></label>
+      <div class="control-section"><div class="control-title"><span class="control-symbol">↔</span> TRANSFORM <span class="section-chevron">⌄</span></div>
+        <div class="sub-label">POSITION <span>WORLD SPACE</span></div>
+        <div class="xyz-row"><label><i>X</i><input id="posX" type="number" step=".1" value="0"></label><label><i>Y</i><input id="posY" type="number" step=".1" value="0"></label><label><i>Z</i><input id="posZ" type="number" step=".1" value="0"></label></div>
+        <div class="sub-label">ROTATION <span>DEGREES</span></div>
+        <div class="xyz-row"><label><i>X</i><input id="rotX" type="number" step="5" value="0"></label><label><i>Y</i><input id="rotY" type="number" step="5" value="0"></label><label><i>Z</i><input id="rotZ" type="number" step="5" value="0"></label></div>
+        <div class="sub-label">SCALE <span>UNIFORM OFF</span></div>
+        <div class="xyz-row"><label><i>X</i><input id="scaleX" type="number" min=".05" max="10" step=".1" value="1"></label><label><i>Y</i><input id="scaleY" type="number" min=".05" max="10" step=".1" value="1"></label><label><i>Z</i><input id="scaleZ" type="number" min=".05" max="10" step=".1" value="1"></label></div>
+        <label class="range-label">UNIFORM SCALE <span id="uniformValue">1.00×</span><input id="uniformScale" type="range" min=".2" max="3" step=".05" value="1"></label>
+      </div>
+      <div class="control-section material-section"><div class="control-title"><span class="control-symbol">◈</span> MATERIAL <span class="section-chevron">⌄</span></div>
+        <div class="sub-label">BASE COLOUR</div><div class="color-row"><input id="colorInput" type="color" value="#6d72ff"><span id="colorHex">#6D72FF</span><button id="randomColor" class="ghost small">Randomize</button></div>
+        <label class="range-label">METALLIC <span id="metalValue">42%</span><input id="metalInput" type="range" min="0" max="1" step=".01" value=".42"></label>
+        <label class="range-label">ROUGHNESS <span id="roughValue">32%</span><input id="roughInput" type="range" min="0" max="1" step=".01" value=".32"></label>
+      </div>
+      <div class="control-section"><div class="control-title"><span class="control-symbol">⌁</span> MOTION LINK <span class="section-chevron">⌄</span></div>
+        <div class="motion-card"><div class="motion-orb">✣</div><div><b id="motionStatus">Phone not connected</b><small id="motionSub">Pair a device to begin</small></div><span class="status-dot"></span></div>
+        <label class="range-label">SENSITIVITY <span id="sensitivityValue">1.0×</span><input id="sensitivity" type="range" min=".2" max="2.5" step=".1" value="1"></label>
+        <div class="motion-actions"><button id="recenterBtn" class="wide-ghost">◎ Recenter motion</button><button id="modeBtn" class="wide-ghost">Mode: Relative rotation</button></div>
+      </div>
+      <button id="resetObject" class="reset-button">⟲ Reset selected object</button>
+    </aside>
+  </main>
+  <footer class="footer"><span><i class="live-dot"></i> SYSTEM OPERATIONAL</span><span>LOCAL SESSION · NO ACCOUNT REQUIRED</span><span>BUILT FOR SPATIAL CREATIVITY <b>✦</b></span></footer>
+</div>
+<div id="modal" class="modal hidden"><div class="modal-card"><button id="closeModal" class="modal-close">×</button><div class="modal-kicker"><span class="live-dot"></span> DEVICE PAIRING</div><h2>Connect your <em>phone.</em></h2><p>Use your phone as a real-time motion controller for the selected 3D object.</p><div class="qr-frame"><div id="qrBox" class="qr-box"><div class="qr-placeholder">▦</div></div></div><div id="pairUrl" class="pair-url">Generating session…</div><button id="copyUrl" class="primary full">Copy controller link</button><div class="pair-note">Phone motion sensors generally require HTTPS. Localhost on your PC is not reachable as localhost from your phone. See README for pairing setup.</div><div class="modal-status"><span class="status-dot"></span><span id="pairStatus">Waiting for phone…</span></div></div></div>
+<script src="/static/app.js"></script>
+</body></html>
